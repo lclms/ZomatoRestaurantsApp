@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+     <title>Zomato Database App</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <style type="text/css">
+    	 #map_id { width:800px; height: 600px;  }
+    	 #hosts_id { width:800px; height: 500px;  }
+
+	
+    </style>
+    
+    <!-- other own CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}" >
+
+     <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+     <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.4/leaflet.css">
+
+
+</head>
+
+<body>
+
+	<!-- the user interface hereafter -->
+	<!-- see https://www.w3schools.com/bootstrap/default.asp for information -->
+
+    <div class="jumbotron text-center">
+        <div class="titulo">Big Data Visualization</div>
+        <div class="subtitulo"><p>Zomato Database</p></div> 
+    </div>
+
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+        	<div class="navbar-header">
+        		<a class="navbar-brand" href="/">Home</a>
+    		</div>
+    		<ul class="nav navbar-nav">
+      			<li class="dropdown">
+        			<a class="dropdown-toggle" data-toggle="dropdown" href="#">Zomato Restaurants (charts)
+        			<span class="caret"></span></a>
+        			<ul class="dropdown-menu">
+          				<li><a href="/barchart">Bar chart</a></li>
+          				<li><a href="/bubblechart">Bubble chart</a></li>
+        			</ul>
+      			</li>
+      			<li><a class="navbar-brand" href="/about">About</a></li>
+   		 	</ul>
+  		</div>
+	</nav>
+
+	<div class="col-lg-12">
+			<div class="panel panel-default" style="height: 800px;">
+					<div class="panel-heading">
+						Bubblechart
+					</div>
+		<div class="panel-body">
+			<div class="col-sm-4" id="filtering_id">
+				<h3>Filtering data</h3> 
+				<!-- href="{{ url_for('main.filtering') }}" -->
+				<form action="/bubblechart_filtering" method="POST">
+				  <label for="country_id">Select countries:</label>
+				  <select class="form-control" id="country_id" name="countries" required multiple>
+					  <option {% if "India" == request.form['countries'] %} selected {% endif %} value="India">India</option>
+					  <option {% if "Australia" == request.form['countries'] %} selected {% endif %} value="Australia">Australia</option>
+					  <option {% if "Brazil" == request.form['countries'] %} selected {% endif %} value="Brazil">Brazil</option>
+					  <option {% if "Canada" == request.form['countries'] %} selected {% endif %} value="Canada">Canada</option>
+					  <option {% if "Indonesia" == request.form['countries'] %} selected {% endif %} value="Indonesia">Indonesia</option>
+					  <option {% if "New Zealand" == request.form['countries'] %} selected {% endif %} value="New Zealand">New Zealand</option>
+					  <option {% if "Phillipines" == request.form['countries'] %} selected {% endif %} value="Phillipines">Phillipines</option>
+					  <option {% if "Qatar" == request.form['countries'] %} selected {% endif %} value="Qatar">Qatar</option>
+					  <option {% if "Singapore" == request.form['countries'] %} selected {% endif %} value="Singapore">Singapore</option>
+					  <option {% if "South Africa" == request.form['countries'] %} selected {% endif %} value="South Africa">South Africa</option>
+					  <option {% if "Sri Lanka" == request.form['countries'] %} selected {% endif %} value="Sri Lanka">Sri Lanka</option>
+					  <option {% if "Turkey" == request.form['countries'] %} selected {% endif %} value="Turkey">Turkey</option>
+					  <option {% if "UAE" == request.form['countries'] %} selected {% endif %} value="UAE">UAE</option>
+					  <option {% if "United Kingdom" == request.form['countries'] %} selected {% endif %} value="United Kingdom">United Kingdom</option>
+					  <option {% if "United States" == request.form['countries'] %} selected {% endif %} value="United States">United States</option>
+				  </select><br>
+				  <label for="optionselect_id">Select one option:</label>
+				  <select class="form-control" id="optionselect_id" name="optionselect">
+					  <option value="">Select</option>
+					  <option {% if "1" == request.form['optionselect'] %} selected {% endif %} value="1">Number of restaurants</option>
+					  <optgroup label="Quantity by country - Rating text">
+					  <option {% if "3" == request.form['optionselect'] %} selected {% endif %} value="3">Excellent</option>
+					  <option {% if "4" == request.form['optionselect'] %} selected {% endif %} value="4">Very Good</option>
+					  <option {% if "5" == request.form['optionselect'] %} selected {% endif %} value="5">Good</option>
+					  <option {% if "6" == request.form['optionselect'] %} selected {% endif %} value="6">Average</option>
+					  <option {% if "7" == request.form['optionselect'] %} selected {% endif %} value="7">Poor</option>
+				  </optgroup>
+				  </select>
+					
+					<button type="submit" class="btn btn-primary">Submit</button>
+			  </form>	
+			</div>
+		  <div class="col-sm-8" id="hosts_id"></div>
+	</div>
+</div>
+</div>
+
+
+
+	<!-- now, the Javascript code to deal with the user interface -->
+
+	<!-- Leaflet JS to deal with map -->
+    <!-- make sure you put this AFTER Leaflet's CSS -->
+   	<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.4/leaflet.js"></script>
+
+   <!-- for D3 visualization -->
+    <script src="https://d3js.org/d3.v4.js"></script>
+	
+	<!-- our own JavaScript functions -->
+    
+    <script src="{{ url_for('static', filename='js/bubblechart.js') }}"></script>
+
+	<!-- this is where data is passed from Flask templates to our js code -->
+    <script>
+		
+    	drawHostsProfile({{ profiling_data | safe }} );
+    	
+	</script>
+
+</body>
+
+</html>
+
+
+
+
+

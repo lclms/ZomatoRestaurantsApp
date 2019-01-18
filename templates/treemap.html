@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+     <title>Zomato Database App</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <style type="text/css">
+    	 #map_id { width:800px; height: 600px;  }
+    	 #hosts_id { width:800px; height: 500px;  }
+         #chart {
+  background: #fff;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+text {
+  pointer-events: none;
+}
+
+.grandparent text {
+  font-weight: bold;
+}
+
+rect {
+  fill: none;
+  stroke: #fff;
+}
+
+rect.parent,
+.grandparent rect {
+  stroke-width: 2px;
+}
+
+rect.parent {
+    pointer-events: none;
+}
+
+.grandparent rect {
+  fill: orange;
+}
+
+.grandparent:hover rect {
+  fill: #ee9700;
+}
+
+.children rect.parent,
+.grandparent rect {
+  cursor: pointer;
+}
+
+.children rect.parent {
+  fill: #bbb;
+  fill-opacity: .5;
+}
+
+.children:hover rect.child {
+  fill: #bbb;
+}
+    </style>
+    
+    <!-- other own CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}" >
+
+     <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+     <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.4/leaflet.css">
+
+
+</head>
+
+<body>
+
+	<!-- the user interface hereafter -->
+	<!-- see https://www.w3schools.com/bootstrap/default.asp for information -->
+
+    <div class="jumbotron text-center">
+        <div class="titulo">Big Data Visualization</div>
+        <div class="subtitulo"><p>Zomato Database</p></div> 
+    </div>
+
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+        	<div class="navbar-header">
+        		<a class="navbar-brand" href="/">Home</a>
+    		</div>
+    		<ul class="nav navbar-nav">
+      			<li class="dropdown">
+        			<a class="dropdown-toggle" data-toggle="dropdown" href="#">Zomato Restaurants (charts)
+        			<span class="caret"></span></a>
+        			<ul class="dropdown-menu">
+          				<li><a href="/barchart">Bar chart</a></li>
+						  <li><a href="/bubblechart">Bubble chart</a></li>
+						  <li><a href="/treemap">Treemap</a></li>
+        			</ul>
+      			</li>
+      			<li><a class="navbar-brand" href="/about">About</a></li>
+   		 	</ul>
+  		</div>
+	</nav>
+<div class="col-lg-12">
+		<div class="panel panel-default">
+				<div class="panel-heading">
+                    Treemapp
+				</div>
+	<div class="panel-body">		  
+		  <div class="col-sm-8" id="chart"></div>
+	</div>
+</div>
+</div>
+
+	<!--<div class="row">
+  		<div class="col-sm-8" id="hosts_id"></div>
+  		<div class="col-sm-4">
+  			<img src="{{ url_for('static', filename='img/lisboa.jpg') }}" class="img-thumbnail" alt="Lisboa" width="304" height="236">
+  		</div>
+	</div>-->
+
+	<!-- now, the Javascript code to deal with the user interface -->
+
+	<!-- Leaflet JS to deal with map -->
+    <!-- make sure you put this AFTER Leaflet's CSS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.4/leaflet.js"></script>
+
+    <script src="http://code.jquery.com/jquery-1.7.2.min.js"></script>
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script src="{{ url_for('static', filename='js/treemap.js') }}"></script>
+
+	<!-- this is where data is passed from Flask templates to our js code -->
+    <script>
+		
+    drawSqueres({{ profiling_data | safe }} );
+		
+	</script>
+
+
+</body>
+
+</html>
+
+
+
+
+
