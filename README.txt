@@ -12,7 +12,7 @@ Setting up the application
 
 1. Create a directory and put there the given application structure. Let us say the base directory of this application is airbnbApp
 
-2. Open a Terminal window and move to the directory airbnbApp
+2. Open a Terminal window and move to the directory ZomatoRestaurantsApp
 
 3. Initialize a virtual environment e.g. named env. Administrator privileges are required
 to install virtualenv
